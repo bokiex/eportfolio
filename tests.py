@@ -23,3 +23,28 @@ def test_connection():
     element_present = EC.presence_of_element_located((By.ID, "portfolioBody"))
     wait = WebDriverWait(driver,timeout).until(element_present)
     assert(wait)
+
+
+def test_view_project_detail():
+    driver.get("http://127.0.0.1:8000/projects/")
+    python = driver.find_element_by_xpath("//a[@href='/projects/6/']")
+    django = driver.find_element_by_xpath("//a[@href='/projects/8/']")
+    react = driver.find_element_by_xpath("//a[@href='/projects/9/']")
+
+    python.click()
+    element_present = EC.presence_of_element_located((By.XPATH, "//p[text()='A python test script']"))
+    wait = WebDriverWait(driver,timeout).until(element_present)
+    assert(wait)
+    driver.back()
+
+    django.click()
+    element_present = EC.presence_of_element_located((By.XPATH, "//p[text()='A Django web app']"))
+    wait = WebDriverWait(driver,timeout).until(element_present)
+    assert(wait)
+    driver.back()
+
+    react.click()
+    element_present = EC.presence_of_element_located((By.XPATH, "//p[text()='A React web app']"))
+    wait = WebDriverWait(driver,timeout).until(element_present)
+    assert(wait)
+    driver.back()

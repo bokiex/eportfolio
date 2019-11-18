@@ -9,7 +9,7 @@ class CommentForm(forms.Form):
         })
     )
     body = forms.CharField(
-        max_length=60,
+        max_length=80,
         widget=forms.Textarea(
         attrs={
             "class": "form-control",

@@ -1,4 +1,17 @@
 {% extends "base.html" %} {% load static %} {% block page_content %}
+
+<div class="projHead">
+  <div class="card mb-2 mt-2">
+    <div class="card-body">
+        <h5 class="card-title">About Me</h5>
+        <p class="card-text">
+        <span>I'm a Year 3 NP Student currently studying IT. I have strong interests in programming and problem solving.</span>
+        <span>This is a small website to showcase the different projects I've done so far. </span>
+        </p>
+      </div>
+  </div>
+</div>
+<div class="projBody">
 <h1>Projects</h1>
 <div class="row">
   {% for project in projects %}
@@ -15,5 +28,6 @@
     </div>
   </div>
   {% endfor %}
+</div>
 </div>
 {% endblock %}

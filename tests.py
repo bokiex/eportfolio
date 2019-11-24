@@ -203,7 +203,7 @@ def test_bad_name_add_category():
     save.click()
     element_present = EC.presence_of_element_located((By.XPATH, "//div[@class='field-name']/ul/li[text()='This field is required.']"))
     assert(element_present)
-        
+
 # Log out
 def test_logout():
     logout = driver.find_element_by_xpath("//a[contains(@href,'/admin/logout/')]")
@@ -273,7 +273,7 @@ def test_long_string_comment():
     body = driver.find_element_by_name("body")
     submit = driver.find_element_by_xpath("//button[text()='Submit']")
 
-    while (count < 10):
+    while (count < 4):
         string = string * 2
         count+= 1
     author.send_keys("Test Name")

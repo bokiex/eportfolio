@@ -26,7 +26,7 @@ def test_unsuccessful_login():
 
 def test_login():
     nameString = "bokie"
-    passString="123123"
+    passString="correctPassword"
     driver.get("http://127.0.0.1:8000/admin/")
     name = driver.find_element_by_name("username")
     password = driver.find_element_by_name("password")
@@ -112,7 +112,7 @@ def test_successful_add_user():
 
 def test_shortpassword_change_password():
     driver.get("http://127.0.0.1:8000/admin/password_change/")
-    driver.find_element_by_name('old_password').send_keys('123123')
+    driver.find_element_by_name('old_password').send_keys('correctPassword')
     driver.find_element_by_name('new_password1').send_keys('123123z')
     driver.find_element_by_name('new_password2').send_keys('123123z')
     driver.find_element_by_name('new_password2').send_keys(Keys.RETURN)
@@ -123,16 +123,16 @@ def test_shortpassword_change_password():
 def test_wrongoldpass_change_password():
     driver.get("http://127.0.0.1:8000/admin/password_change/")
     driver.find_element_by_name('old_password').send_keys('wrongPassword')
-    driver.find_element_by_name('new_password1').send_keys('correctPassword')
-    driver.find_element_by_name('new_password2').send_keys('correctPassword')
+    driver.find_element_by_name('new_password1').send_keys('newCorrectPassword')
+    driver.find_element_by_name('new_password2').send_keys('newCorrectPassword')
     driver.find_element_by_name('new_password2').send_keys(Keys.RETURN)
     error = driver.find_element_by_xpath("//ul[@class='errorlist']").find_elements_by_tag_name('li')[0]
     assert error.text == 'Your old password was entered incorrectly. Please enter it again.'
 
 def test_wrong2ndpass_change_password():
     driver.get("http://127.0.0.1:8000/admin/password_change/")
-    driver.find_element_by_name('old_password').send_keys('123123')
-    driver.find_element_by_name('new_password1').send_keys('correctPassword')
+    driver.find_element_by_name('old_password').send_keys('correctPassword')
+    driver.find_element_by_name('new_password1').send_keys('newCorrectPassword')
     driver.find_element_by_name('new_password2').send_keys('wrong2ndpass')
     driver.find_element_by_name('new_password2').send_keys(Keys.RETURN)
     error = driver.find_element_by_xpath("//ul[@class='errorlist']").find_elements_by_tag_name('li')[0]
@@ -140,9 +140,9 @@ def test_wrong2ndpass_change_password():
 
 def test_successful_change_password():
     driver.get("http://127.0.0.1:8000/admin/password_change/")
-    driver.find_element_by_name('old_password').send_keys('123123')
-    driver.find_element_by_name('new_password1').send_keys('correctPassword')
-    driver.find_element_by_name('new_password2').send_keys('correctPassword')
+    driver.find_element_by_name('old_password').send_keys('correctPassword')
+    driver.find_element_by_name('new_password1').send_keys('newCorrectPassword')
+    driver.find_element_by_name('new_password2').send_keys('newCorrectPassword')
     driver.find_element_by_name('new_password2').send_keys(Keys.RETURN)
 
     WebDriverWait(driver, 3).until(EC.url_changes(driver.current_url))

@@ -110,6 +110,46 @@ def test_successful_add_user():
     element_present = EC.presence_of_element_located((By.XPATH, "//li[@class='success']"))
     assert(element_present)
 
+def test_shortpassword_change_password():
+    driver.get("http://127.0.0.1:8000/admin/password_change/")
+    driver.find_element_by_name('old_password').send_keys('123123')
+    driver.find_element_by_name('new_password1').send_keys('123123z')
+    driver.find_element_by_name('new_password2').send_keys('123123z')
+    driver.find_element_by_name('new_password2').send_keys(Keys.RETURN)
+
+    error = driver.find_element_by_xpath("//ul[@class='errorlist']").find_elements_by_tag_name('li')[0]
+    assert error.text == 'This password is too short. It must contain at least 8 characters.'
+
+def test_wrongoldpass_change_password():
+    driver.get("http://127.0.0.1:8000/admin/password_change/")
+    driver.find_element_by_name('old_password').send_keys('wrongPassword')
+    driver.find_element_by_name('new_password1').send_keys('correctPassword')
+    driver.find_element_by_name('new_password2').send_keys('correctPassword')
+    driver.find_element_by_name('new_password2').send_keys(Keys.RETURN)
+    error = driver.find_element_by_xpath("//ul[@class='errorlist']").find_elements_by_tag_name('li')[0]
+    assert error.text == 'Your old password was entered incorrectly. Please enter it again.'
+
+def test_wrong2ndpass_change_password():
+    driver.get("http://127.0.0.1:8000/admin/password_change/")
+    driver.find_element_by_name('old_password').send_keys('123123')
+    driver.find_element_by_name('new_password1').send_keys('correctPassword')
+    driver.find_element_by_name('new_password2').send_keys('wrong2ndpass')
+    driver.find_element_by_name('new_password2').send_keys(Keys.RETURN)
+    error = driver.find_element_by_xpath("//ul[@class='errorlist']").find_elements_by_tag_name('li')[0]
+    assert error.text == 'The two password fields didn\'t match.'
+
+def test_successful_change_password():
+    driver.get("http://127.0.0.1:8000/admin/password_change/")
+    driver.find_element_by_name('old_password').send_keys('123123')
+    driver.find_element_by_name('new_password1').send_keys('correctPassword')
+    driver.find_element_by_name('new_password2').send_keys('correctPassword')
+    driver.find_element_by_name('new_password2').send_keys(Keys.RETURN)
+
+    WebDriverWait(driver, 3).until(EC.url_changes(driver.current_url))
+
+    content = driver.find_element_by_id('content')
+    
+    assert content.find_element_by_tag_name('h1').text == 'Password change successful'
 
 # Add Blog
 def test_add_successful_blog():
@@ -273,7 +313,7 @@ def test_long_string_comment():
     body = driver.find_element_by_name("body")
     submit = driver.find_element_by_xpath("//button[text()='Submit']")
 
-    while (count < 4):
+    while (count < 5):
         string = string * 2
         count+= 1
     author.send_keys("Test Name")
@@ -316,3 +356,5 @@ def test_unique_char_name():
     assert(wait)
     driver.back()
 
+
+driver.quit()

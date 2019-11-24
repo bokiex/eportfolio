@@ -7,15 +7,18 @@ from selenium.webdriver.common.by import By
 from blog.models import Category, Post
 from django.test import TestCase
 
-# driver = webdriver.Chrome()
-# driver.maximize_window()
-# timeout = 10
+driver = webdriver.Chrome()
+driver.maximize_window()
+timeout = 10
 
-# class TestBlog(TestCase):
-#     def create_category(self, name):
-#         return Category.objects.create(name=name)
+class TestBlog(TestCase):
+    def create_blog(self, title):
+        category = Category.objects.get(name="Django")
+        b = Post(title = title, body='testtest', category = category)
+        b.save()
+        return b
 
-#     def test_category(self):
-#         category = self.create_category("Test")
-#         self.assertIsInstance(category, Category)
-#         self.assertEqual(category.__str__(), "Test")
+    def test_create_blog(self):
+        blog = self.create_blog("asdfsadf")
+        self.assertIsInstance(blog, Post)
+        self.assertEqual(blog.__str__(), "asdfsadf")

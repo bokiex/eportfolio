@@ -104,15 +104,15 @@ def test_successful_add_user():
     password2 = driver.find_element_by_name("password2")
     submit = driver.find_element_by_name("_addanother")
     name.send_keys("goodname/10")
-    password.send_keys("goodpassword")
-    password2.send_keys("goodpassword")
+    password.send_keys("123123123D")
+    password2.send_keys("123123123D")
     submit.click()
     element_present = EC.presence_of_element_located((By.XPATH, "//li[@class='success']"))
     assert(element_present)
 
 
-# Add Post
-def test_add_successful_post():
+# Add Blog
+def test_add_successful_blog():
     driver.get("http://127.0.0.1:8000/admin/")
     add = driver.find_element_by_xpath("//a[contains(@href,'/admin/blog/post/add/')]")
     add.click()
@@ -126,14 +126,14 @@ def test_add_successful_post():
     category = driver.find_element_by_xpath("//select[@id='id_categories']/option[text()='Django']")
     save = driver.find_element_by_name("_save")
     title.send_keys("This is a test blog")
-    body.send_keys("Konnichiwa minnasan I want to commit seppuku")
+    body.send_keys("This is a test body")
 
     category.click()    
     save.click()
     element_present = EC.presence_of_element_located((By.XPATH, "//li[@class='success']"))
     assert(element_present)
     
-def test_bad_title_post():
+def test_bad_title_blog():
     driver.get("http://127.0.0.1:8000/admin/")
     add = driver.find_element_by_xpath("//a[contains(@href,'/admin/blog/post/add/')]")
     add.click()
@@ -145,14 +145,14 @@ def test_bad_title_post():
     body = driver.find_element_by_name("body")
     category = driver.find_element_by_xpath("//select[@id='id_categories']/option[text()='Django']")
     save = driver.find_element_by_name("_save")
-    body.send_keys("Konnichiwa minnasan I want to commit seppuku")
+    body.send_keys("This is a test body")
 
     category.click()    
     save.click()
     element_present = EC.presence_of_element_located((By.XPATH, "//p[text()='Please correct the errors below.']"))
     assert(element_present)
 
-def test_add_bad_title_post():
+def test_add_bad_title_blog():
     driver.get("http://127.0.0.1:8000/admin/")
     add = driver.find_element_by_xpath("//a[contains(@href,'/admin/blog/post/add/')]")
     add.click()
@@ -164,18 +164,54 @@ def test_add_bad_title_post():
     body = driver.find_element_by_name("body")
     category = driver.find_element_by_xpath("//select[@id='id_categories']/option[text()='Django']")
     save = driver.find_element_by_name("_save")
-    body.send_keys("Konnichiwa minnasan I want to commit seppuku")
+    body.send_keys("This is a test body")
 
     category.click()    
     save.click()
+    element_present = EC.presence_of_element_located((By.XPATH, "//p[text()='Please correct the errors below.']"))
+    assert(element_present)
 
+# Category
+def test_add_category():
+    driver.get("http://127.0.0.1:8000/admin/")
+    add = driver.find_element_by_xpath("//a[contains(@href,'/admin/blog/category/add/')]")
+    add.click()
+
+    element_present = EC.presence_of_element_located((By.ID, "id_name"))
+    wait = WebDriverWait(driver,timeout).until(element_present)
+    assert(wait)
+
+    name = driver.find_element_by_name("name")
+    save = driver.find_element_by_name("_save")
+    name.send_keys("Test Category")
+
+    save.click()
+    element_present = EC.presence_of_element_located((By.XPATH, "//li[@class='success']"))
+    assert(element_present)
+
+def test_bad_name_add_category():
+    driver.get("http://127.0.0.1:8000/admin/")
+    add = driver.find_element_by_xpath("//a[contains(@href,'/admin/blog/category/add/')]")
+    add.click()
+
+    element_present = EC.presence_of_element_located((By.ID, "id_name"))
+    wait = WebDriverWait(driver,timeout).until(element_present)
+    assert(wait)
+
+    save = driver.find_element_by_name("_save")
+
+    save.click()
+    element_present = EC.presence_of_element_located((By.XPATH, "//div[@class='field-name']/ul/li[text()='This field is required.']"))
+    assert(element_present)
+        
+# Log out
 def test_logout():
     logout = driver.find_element_by_xpath("//a[contains(@href,'/admin/logout/')]")
     logout.click()
     element_present = EC.presence_of_element_located((By.XPATH, "//h1[text()='Logged out']"))
     WebDriverWait(driver, timeout).until(element_present)
 
-
+# Project
 def test_project_connection():
     driver.get("http://127.0.0.1:8000/projects/")
     element_present = EC.presence_of_element_located((By.ID, "portfolioBody"))
@@ -199,6 +235,13 @@ def test_view_project_detail():
     assert(wait)
     driver.back()
 
+# Blog
+def test_blog_connection():
+    driver.get("http://127.0.0.1:8000/blog/")
+    element_present = EC.presence_of_element_located((By.ID, "portfolioBody"))
+    wait = WebDriverWait(driver,timeout).until(element_present)
+    assert(wait)
+
 def test_view_blog_detail():
     driver.get("http://127.0.0.1:8000/blog/")
     blogpost = driver.find_element_by_xpath("//a[@href='/blog/1/']")
@@ -208,6 +251,7 @@ def test_view_blog_detail():
     assert(wait)
     driver.back()
 
+# Add comment
 def test_add_valid_comment():
     driver.get("http://127.0.0.1:8000/blog/1/")
     author = driver.find_element_by_name("author")
